@@ -3,8 +3,10 @@ package com.cabinet.common.rmi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface Animal extends Remote {
+public interface IAnimal extends Remote {
 	/* METHODS */
+	String getNom() throws RemoteException;
+	
 	String afficherNomAnimal() throws RemoteException;
 
 	String afficherRace() throws RemoteException;

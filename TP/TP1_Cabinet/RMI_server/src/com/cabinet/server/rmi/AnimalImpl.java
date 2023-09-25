@@ -5,10 +5,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.cabinet.common.rmi.Animal;
+import com.cabinet.common.rmi.IAnimal;
 import com.cabinet.common.rmi.Espece;
 
-public class Animalmpl extends UnicastRemoteObject implements Animal {
+public class AnimalImpl extends UnicastRemoteObject implements IAnimal {
 
 	private String nom;
 	private String maitre;
@@ -20,7 +20,7 @@ public class Animalmpl extends UnicastRemoteObject implements Animal {
 	private DossierDeSuivi dossierDeSuivi;
 
 	/* CONSTRUCTOR */
-	protected Animalmpl(String nom, String maitre, String race, Espece espece, String cri) throws RemoteException {
+	protected AnimalImpl(String nom, String maitre, String race, Espece espece, String cri) throws RemoteException {
 		this.nom = nom;
 		this.maitre = maitre;
 		this.race = race;
@@ -33,7 +33,41 @@ public class Animalmpl extends UnicastRemoteObject implements Animal {
 		this.dossierDeSuivi = new DossierDeSuivi("\n\t" + dateString + " : RAS \n");
 	}
 
+	protected AnimalImpl(String nom, String maitre, String race, String nomEspece, int dureeDeVieMoyenne, String cri)
+			throws RemoteException {
+		this.nom = nom;
+		this.maitre = maitre;
+		this.race = race;
+		this.espece = new Espece(nomEspece, dureeDeVieMoyenne);
+		this.cri = cri;
+
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+		String dateString = formatter.format(date);
+		this.dossierDeSuivi = new DossierDeSuivi("\n\t" + dateString + " : RAS \n");
+	}
+
+	protected AnimalImpl(String nom, String maitre, String race, String nomEspece, int dureeDeVieMoyenne, String cri,
+			String etat)
+			throws RemoteException {
+		this.nom = nom;
+		this.maitre = maitre;
+		this.race = race;
+		this.espece = new Espece(nomEspece, dureeDeVieMoyenne);
+		this.cri = cri;
+
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+		String dateString = formatter.format(date);
+		this.dossierDeSuivi = new DossierDeSuivi("\n\t" + dateString + " : " + etat + "\n");
+	}
+
 	/* METHODS */
+	@Override
+	public String getNom() throws RemoteException {
+		return this.nom;
+	}
+
 	@Override
 	public String afficherNomAnimal() throws RemoteException {
 		return "L'animal " + this.nom + " appartient à " + this.maitre;
@@ -66,7 +100,6 @@ public class Animalmpl extends UnicastRemoteObject implements Animal {
 	public Espece getEspece() throws RemoteException {
 		return new Espece(espece.getNom(), espece.getDureeDeVieMoyenne());
 	}
-	
 
 	@Override
 	public void nommer() throws RemoteException {
